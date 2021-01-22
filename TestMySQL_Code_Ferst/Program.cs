@@ -20,6 +20,7 @@ namespace TestMySQL_Code_Ferst
                 Console.WriteLine("Если вы хотите  получить список групп  - введите \"all_grups\"");
                 Console.WriteLine("Если вы хотите  Добавить  студента - введите \"add_student\"");
                 Console.WriteLine("Если вы хотите  получить список студентов - введите \"all_student\"");
+                Console.WriteLine("Если вы хотите  удалить студента - введите \"remove_student\"");
                 Console.WriteLine("Для выхода  - введите \"*\"");
                 
 
@@ -48,6 +49,18 @@ namespace TestMySQL_Code_Ferst
                     case "all_student":
                         AllStudent().ForEach(x => Console.WriteLine(x));
                         break;
+
+                    case "remove_student":
+                        Console.WriteLine("Удаление студента \n Введите имя студента");
+                        try
+                        {
+                            RemoveStudent(Console.ReadLine());
+                            Console.WriteLine("Студент  удален");
+                        }
+                        catch(Exception ex) { Console.WriteLine(ex.Message); }
+                        break;
+
+
                     case "*":
                         flag = false;return;
 
@@ -56,6 +69,20 @@ namespace TestMySQL_Code_Ferst
                         break;
                 }
                 Console.ReadLine();
+            }
+        }
+
+        private static void RemoveStudent(string name)
+        {
+            try
+            {
+                Model.UserContext context = new Model.UserContext();
+                context.Users.Remove(context.Users.Single(x => x.Name == name));
+                context.SaveChanges();
+            }
+            catch
+            {
+                throw new Exception("Ошибка удаления");
             }
         }
 
